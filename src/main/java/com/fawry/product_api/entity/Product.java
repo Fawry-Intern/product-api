@@ -22,24 +22,29 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
 
-    @NotBlank(message = "Product name is required")
+    @NotBlank
+    @Column(name = "product_name", nullable = false, length = 255)
     private String name;
 
-    @NotNull(message = "Product price is required")
+    @NotNull
+    @Min(value = 0, message = "Product price must be non-negative")
+    @Column(name = "product_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String imgUrl;
+    @Column(name = "img_url", columnDefinition = "TEXT")
+    private String imageUrl;
 
     @CreationTimestamp
-    @NotNull
+    @Column(name = "created_at", updatable = false, nullable = false)
     private Instant createdAt;
 
     @UpdateTimestamp
-    @NotNull
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 }
