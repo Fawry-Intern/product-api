@@ -31,7 +31,7 @@ public class DBConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource){
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         var em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("com.fawry.product_api.entity");
@@ -42,6 +42,7 @@ public class DBConfig {
 
         return em;
     }
+
     private Properties hibernateProperties() {
         var props = new Properties();
         props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
