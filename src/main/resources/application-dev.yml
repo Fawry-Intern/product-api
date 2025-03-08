@@ -1,19 +1,15 @@
 server:
-  port: 7071
+  port: 6061
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8765/eureka
-spring:
+custom:
   datasource:
+    driver: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/product_db
     username: postgres
     password: postgres
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
