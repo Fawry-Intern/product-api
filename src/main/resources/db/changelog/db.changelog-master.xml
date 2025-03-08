@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="create_products_tbl" author="yourname">
+    <changeSet id="create_products_tbl" author="Hossam hatem">
         <createTable tableName="products" schemaName="public">
             <column name="product_id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
