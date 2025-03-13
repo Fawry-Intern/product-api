@@ -5,15 +5,22 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8765/eureka
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/product_db
-    username: postgres
-    password: 12345
-    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  cache:
+    type: redis
+    data:
+      redis:
+        host: localhost
+        port: 6379
+custom:
+  datasource:
+    driver: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/product_db
+    username: postgres
+    password: 12345
