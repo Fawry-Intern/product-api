@@ -1,5 +1,6 @@
 package com.fawry.product_api.service;
 
+import com.fawry.product_api.dto.ProductDTO;
 import com.fawry.product_api.entity.Product;
 import org.springframework.stereotype.Service;
 
@@ -8,9 +9,9 @@ import java.util.Optional;
 
 @Service
 public interface ProductService {
-    List<Product> getAllProducts();
-    Optional<Product> getProductById(Long id);
+    List<ProductDTO> getAllProducts();
+    Optional<ProductDTO> getProductById(Long id);
     void deleteProductById(Long id);
-    Product saveProduct(Product product);
+    ProductDTO saveProduct(Product product);
 
 }

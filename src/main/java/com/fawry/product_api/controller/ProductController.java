@@ -1,5 +1,6 @@
 package com.fawry.product_api.controller;
 
+import com.fawry.product_api.dto.ProductDTO;
 import com.fawry.product_api.entity.Product;
 import com.fawry.product_api.exception.ProductNotFoundException;
 import com.fawry.product_api.service.ProductService;
@@ -19,18 +20,18 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id).
-                orElseThrow( () -> new ProductNotFoundException("Product with id: " + id + " not found"));
+    public ProductDTO getProductById(@PathVariable Long id) {
+        return productService.getProductById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product with id: " + id + " not found"));
     }
 
     @GetMapping("/products")
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @PostMapping("/products")
-    public Product saveProduct(@RequestBody Product product) {
+    public ProductDTO saveProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
     }
 

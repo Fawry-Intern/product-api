@@ -25,15 +25,16 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Product Name is mandatory")
     @Column(name = "product_name", nullable = false, length = 255)
     private String name;
 
-    @NotNull
+    @NotNull(message = "Product Price is mandatory")
     @Min(value = 0, message = "Product price must be non-negative")
     @Column(name = "product_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @NotNull(message = "Product Description is mandatory")
     @Column(columnDefinition = "TEXT")
     private String description;
 
