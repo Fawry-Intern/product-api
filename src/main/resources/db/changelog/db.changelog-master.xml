@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="create_products_tbl" author="Hossam Hatem">
+    <changeSet id="create_products_tbl" author="muhammad hussein">
         <createTable tableName="products" schemaName="public">
             <column name="product_id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -26,6 +26,11 @@
         </createTable>
         <rollback>
             <dropTable tableName="products"/>
+            <sql>DROP FUNCTION IF EXISTS set_updated_at_column();</sql>
         </rollback>
+    </changeSet>
+
+    <changeSet id="build_idx_on_product_name" author="muhammad hussein">
+        <sqlFile path="db/changelog/sql/idx_product_name_v.0.0.0.sql"/>
     </changeSet>
 </databaseChangeLog>

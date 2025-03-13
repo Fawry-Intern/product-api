@@ -1,16 +1,18 @@
 package com.fawry.product_api.service;
 
+import com.fawry.product_api.dto.ProductRequest;
 import com.fawry.product_api.entity.Product;
+import com.fawry.kafka.events.ProductEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface ProductService {
     List<Product> getAllProducts();
-    Optional<Product> getProductById(Long id);
+    Product getProductById(Long id);
     void deleteProductById(Long id);
-    Product saveProduct(Product product);
+    Product saveProduct(ProductRequest request);
+    void sendProductNotification(ProductEvent event);
 
 }
