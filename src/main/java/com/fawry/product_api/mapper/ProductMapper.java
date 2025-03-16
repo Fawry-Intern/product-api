@@ -31,6 +31,7 @@ public class ProductMapper {
     public ProductResponse mapProductToResponse(Product product) {
         return ProductResponse.builder()
                 .name(product.getName())
+                .id(product.getId())
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())

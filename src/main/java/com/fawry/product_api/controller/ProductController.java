@@ -5,6 +5,7 @@ import com.fawry.product_api.dto.ProductResponse;
 import com.fawry.product_api.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,15 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(
             @Valid @RequestBody ProductRequest request
     ) {
-        ProductResponse createdProduct = productService.saveProduct(request);
-        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+        ProductResponse product = productService.saveProduct(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
+
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProductById(

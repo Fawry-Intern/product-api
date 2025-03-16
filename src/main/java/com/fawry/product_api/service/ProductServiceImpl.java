@@ -59,12 +59,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Caching(
             evict = @CacheEvict(cacheNames = PRODUCT_LIST_CACHE, allEntries = true),
-            put = @CachePut(cacheNames = PRODUCTS_CACHE, key = "#result.id")
+            put = @CachePut(cacheNames = PRODUCTS_CACHE, key = "#result?.id")
     )
     @Transactional
     public ProductResponse saveProduct(ProductRequest request) {
         var product = ProductMapper.mapRequestToProduct(request);
         var savedProduct = productRepository.save(product);
+        System.out.println(savedProduct);
+        if (savedProduct.getId() == null) {
+            throw new IllegalStateException("Product ID is null after saving");
+        }
         sendProductNotification(ProductMapper.mapProductToEvent(savedProduct));
         return ProductMapper.mapProductToResponse(savedProduct);
     }
