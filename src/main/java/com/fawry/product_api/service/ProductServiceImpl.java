@@ -1,22 +1,25 @@
 package com.fawry.product_api.service;
 
+import com.fawry.kafka.producers.ProductProducer;
 import com.fawry.product_api.dto.ProductRequest;
 import com.fawry.product_api.dto.ProductResponse;
 import com.fawry.product_api.entity.Product;
 import com.fawry.product_api.exception.ProductNotFoundException;
 import com.fawry.kafka.events.ProductEvent;
-import com.fawry.kafka.producers.ProductProducer;
 import com.fawry.product_api.mapper.ProductMapper;
 import com.fawry.product_api.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.micrometer.common.util.StringUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
 @Service
 @CacheConfig(cacheNames = "products")
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private static final String PRODUCTS_CACHE = "products";
@@ -26,12 +29,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductProducer productProducer;
     private final ProductMapper ProductMapper;
 
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductProducer productProducer, ProductMapper ProductMapper) {
-        this.productRepository = productRepository;
-        this.productProducer = productProducer;
-        this.ProductMapper = ProductMapper;
-    }
 
     @Override
     @Cacheable(cacheNames = PRODUCT_LIST_CACHE, sync = true)
@@ -42,8 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Cacheable(cacheNames = PRODUCTS_CACHE, key = "#id", unless = "#result == null")
     public ProductResponse getProductById(Long id) {
-        var product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product with id: " + id + " not found"));
+        var product = findProductById(id);
         return ProductMapper.mapProductToResponse(product);
     }
 
@@ -79,15 +75,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(Long productId, ProductRequest request) {
-        var product = productRepository.findById(productId)
+    public ProductResponse updateProduct(Long productId,@RequestBody ProductRequest request) {
+        var product = findProductById(productId);
+
+        mergeProductDetails(product, request);
+
+        return ProductMapper.mapProductToResponse(product);
+    }
+
+    private Product findProductById(Long productId) {
+        return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
+    }
 
-        Product updatedProduct = ProductMapper.mapRequestToProduct(request);
-        updatedProduct.setId(productId);
+    private void mergeProductDetails(Product existingProduct, ProductRequest productRequest) {
 
-        Product savedProduct = productRepository.save(updatedProduct);
-        return ProductMapper.mapProductToResponse(savedProduct);
+        if (StringUtils.isNotBlank(productRequest.name())) {
+            existingProduct.setName(productRequest.name());
+        }
+
+        if (StringUtils.isNotBlank(productRequest.description())) {
+            existingProduct.setDescription(productRequest.description());
+        }
+
+        if (StringUtils.isNotBlank(productRequest.imageUrl())) {
+            existingProduct.setImageUrl(productRequest.imageUrl());
+        }
+
+        if (productRequest.price() != null) {
+            existingProduct.setPrice(productRequest.price());
+        }
     }
 
 }
