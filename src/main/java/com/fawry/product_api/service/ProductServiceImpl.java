@@ -25,6 +25,7 @@ import java.util.List;
 @CacheConfig(cacheNames = "products")
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private static final String SEARCH_PRODUCTS_CACHE = "searchProducts";
