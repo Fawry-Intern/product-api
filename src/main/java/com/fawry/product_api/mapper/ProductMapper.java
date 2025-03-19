@@ -2,22 +2,13 @@ package com.fawry.product_api.mapper;
 
 import com.fawry.product_api.dto.ProductRequest;
 import com.fawry.product_api.dto.ProductResponse;
+import com.fawry.product_api.dto.SearchProductResponse;
 import com.fawry.product_api.entity.Product;
-import com.fawry.kafka.events.ProductEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class ProductMapper {
-
-    public ProductEvent mapProductToEvent(Product product) {
-        var event = new ProductEvent();
-        event.setName(product.getName());
-        event.setDescription(product.getDescription());
-        event.setPrice(product.getPrice());
-        event.setImageUrl(product.getImageUrl());
-        return event;
-    }
 
     public Product mapRequestToProduct(ProductRequest productRequest) {
         return Product.builder()
@@ -42,6 +33,15 @@ public class ProductMapper {
         return products.stream()
                 .map(this::mapProductToResponse)
                 .toList();
+    }
+
+    public SearchProductResponse mapToSearchProductResponse(Product product) {
+        return SearchProductResponse.builder()
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 
 }
