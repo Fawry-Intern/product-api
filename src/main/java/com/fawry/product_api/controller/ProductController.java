@@ -31,8 +31,8 @@ public class ProductController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ){
-        Page<SearchProductResponse> products = productService.searchProducts(name,description, minPrice, maxPrice, page, size);
-        return ResponseEntity.ok(products);
+        /*Page<SearchProductResponse> products = productService.searchProducts(name,description, minPrice, maxPrice, page, size);*/
+        return ResponseEntity.ok(null);
     }
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(
